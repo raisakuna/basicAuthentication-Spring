@@ -12,4 +12,11 @@ Browser can only understand HTTP protocols, but Java code doesn't understand thi
 
 <img src="./Picture11.png" alt="Description of Picture11" width="50%" height="50%">
 
+### Authenticated Object
+*myAccount*
+*myBalance*
+*myLoan*
+*myCard*
+
+### No Authencticated Object 
 
