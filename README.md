@@ -10,4 +10,4 @@ spring-boot-starter-security
 
 Browser can only understand HTTP protocols, but Java code doesn't understand this protocol. So there is a middle man called *Servlet* or web servers like *Apache Tomcat*who convert the received *HTTP message* into *HTTP solid request object*. All these hectic work is simplified by Springboot.
 
-![] (https://miro.medium.com/v2/resize:fit:720/format:webp/1*f1NZoTCuXYPzZlVAnmKhbA.png) 
+ (https://miro.medium.com/v2/resize:fit:720/format:webp/1*f1NZoTCuXYPzZlVAnmKhbA.png) 
