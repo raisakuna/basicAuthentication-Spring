@@ -13,3 +13,4 @@ Browser can only understand HTTP protocols, but Java code doesn't understand thi
 <img src="./Picture11.png" alt="Description of Picture11" width="50%" height="50%">
 
 
+![Screenshot 2024-08-19 212532](https://github.com/user-attachments/assets/ea33cde3-43a3-490e-8bfd-3031b712db45)
