@@ -10,4 +10,6 @@ spring-boot-starter-security
 
 Browser can only understand HTTP protocols, but Java code doesn't understand this protocol. So there is a middle man called *Servlet* or web servers like *Apache Tomcat*who convert the received *HTTP message* into *HTTP solid request object*. All these hectic work is simplified by Springboot.
 
-![My Image](./Picture11.png)
+<img src="./Picture11.png" alt="Description of Picture11" width="50%" height="50%">
+
+
