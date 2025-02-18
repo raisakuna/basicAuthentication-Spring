@@ -16,6 +16,8 @@ public class NoteController {
     @Autowired
     private NoteService noteService;
 
+    //@AuthenticationPrincipal UserDetails -> retrieves the logged-in user's details from the security context.
+
     @PostMapping
     public Note createNote(@RequestBody String content,
                            @AuthenticationPrincipal UserDetails userDetails) {

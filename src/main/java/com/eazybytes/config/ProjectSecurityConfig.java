@@ -5,7 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -14,15 +18,20 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class ProjectSecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        /**
-         * Below is the custom security configuration
-         */
         http.authorizeHttpRequests((requests) ->
-                requests.requestMatchers("/myAccount","/myBalance","/myLoan","/myCard").authenticated()
-                        .requestMatchers("/notice","/contact").permitAll());
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.httpBasic(withDefaults()); // javascript pop up alert form shows, encoded with base64 for Basic Authentication
+                requests
+                        .requestMatchers("/contact").permitAll()
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/admin").denyAll()
+                        .requestMatchers("/admin/**").denyAll()
+                        .anyRequest().authenticated());
+        // http.formLogin(withDefaults());
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.httpBasic(withDefaults());
         return http.build();
+
 
 
         /**
@@ -46,4 +55,28 @@ public class ProjectSecurityConfig {
 
 
     }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        InMemoryUserDetailsManager manager =
+                new InMemoryUserDetailsManager();
+        if (!manager.userExists("user1")) {
+            manager.createUser(
+                    User.withUsername("user1")
+                            .password("{noop}password1")
+                            .roles("USER")
+                            .build()
+            );
+        }
+        if (!manager.userExists("admin")) {
+            manager.createUser(
+                    User.withUsername("admin")
+                            .password("{noop}adminPass")
+                            .roles("ADMIN")
+                            .build()
+            );
+        }
+        return manager;
+    }
+
 }
