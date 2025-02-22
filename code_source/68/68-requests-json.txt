@@ -1,0 +1,97 @@
+{
+    "info": {
+        "name": "Admin API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get All Users",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "accept",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "url": {
+                    "raw": "http://localhost:8080/api/admin/getusers",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "api",
+                        "admin",
+                        "getusers"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update User Role",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "accept",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "url": {
+                    "raw": "http://localhost:8080/api/admin/update-role?userId=1&roleName=ROLE_ADMIN",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "api",
+                        "admin",
+                        "update-role"
+                    ],
+                    "query": [
+                        {
+                            "key": "userId",
+                            "value": "1"
+                        },
+                        {
+                            "key": "roleName",
+                            "value": "ROLE_ADMIN"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get User by ID",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "accept",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "url": {
+                    "raw": "http://localhost:8080/api/admin/user/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "api",
+                        "admin",
+                        "user",
+                        "1"
+                    ]
+                }
+            }
+        }
+    ]
+}

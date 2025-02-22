@@ -16,17 +16,30 @@ import java.util.Objects;
 @NoArgsConstructor
 @Data
 public class UserDetailsImpl implements UserDetails {
+    // This ensures that serialized instances of this class remain compatible across different versions.
+    //
     private static final long serialVersionUID = 1L;
+
+    // Fields
 
     private Long id;
     private String username;
     private String email;
 
-    @JsonIgnore
+    @JsonIgnore  // Prevents the password from being exposed in JSON responses (e.g., API responses).
     private String password;
 
-    private boolean is2faEnabled;
+    private boolean is2faEnabled; // Stores whether two-factor authentication (2FA) is enabled.
 
+   /*
+   This field is a collection of authorities (roles/permissions) assigned to a user in Spring Security.
+   GrantedAuthority is an interface in Spring Security that represents a role or permission assigned to a user.
+   Collection<> --> The field is a collection (List, Set, etc.), meaning a user can have multiple roles or permissions.
+   The wildcard (? extends GrantedAuthority) means this collection can hold any subclass of GrantedAuthority.
+   In practice, this allows flexibility:
+    It can hold SimpleGrantedAuthority (the most common implementation).
+    It can hold custom implementations of GrantedAuthority if needed.
+   */
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String username, String email, String password,
@@ -38,7 +51,13 @@ public class UserDetailsImpl implements UserDetails {
         this.is2faEnabled = is2faEnabled;
         this.authorities = authorities;
     }
+    // Since Spring Security requires roles to be in GrantedAuthority format,
+    // we need to convert AppRole values (enum ->ROLE_USER, ROLE_ADMIN) into SimpleGrantedAuthority.
 
+    // user.getRole() returns an AppRole enum value (ROLE_USER or ROLE_ADMIN).
+    //.name() converts it to a String (e.g., "ROLE_USER").
+    //new SimpleGrantedAuthority(user.getRole().name()) creates a GrantedAuthority.
+    //Wraps the authority in a List since authorities is a collection.
     public static UserDetailsImpl build(User user) {
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getRoleName().name());
 
@@ -52,7 +71,8 @@ public class UserDetailsImpl implements UserDetails {
         );
     }
 
-
+// How Does Spring Security Use This?
+//Spring Security calls getAuthorities() during authentication to get the user's roles/permissions.
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -70,7 +90,7 @@ public class UserDetailsImpl implements UserDetails {
     public String getPassword() {
         return password;
     }
-
+// Returns the hashed password (used for authentication)
     @Override
     public String getUsername() {
         return username;
@@ -99,7 +119,9 @@ public class UserDetailsImpl implements UserDetails {
     public boolean is2faEnabled() {
         return is2faEnabled;
     }
-
+// Object Comparison
+// This ensures users are compared by id instead of memory reference.
+// Prevents duplicate instances in authentication handling.
     @Override
     public boolean equals(Object o) {
         if (this == o)
