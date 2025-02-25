@@ -7,6 +7,7 @@ import com.eazybytes.model.User;
 import com.eazybytes.repositories.RoleRepository;
 import com.eazybytes.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
 
     @Override
     public List<User> getAllUsers() {
