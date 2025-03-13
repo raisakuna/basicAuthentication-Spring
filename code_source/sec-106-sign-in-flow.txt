@@ -1,0 +1,99 @@
+
+// AuthController.java
+@PostMapping("/public/signin")
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        Authentication authentication;
+        try {
+            authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        } catch (AuthenticationException exception) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("message", "Bad credentials");
+            map.put("status", false);
+            return new ResponseEntity<Object>(map, HttpStatus.NOT_FOUND);
+        }
+
+//      set the authentication
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
+
+        // Collect roles from the UserDetails
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        // Prepare the response body, now including the JWT token directly in the body
+        LoginResponse response = new LoginResponse(userDetails.getUsername(), roles, jwtToken);
+
+        // Return the response entity with the JWT token included in the response body
+        return ResponseEntity.ok(response);
+    }
+
+
+
+// LoginRequest.java
+public class LoginRequest {
+    private String username;
+
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
+
+
+
+// LoginResponse.java
+public class LoginResponse {
+    private String jwtToken;
+
+    private String username;
+    private List<String> roles;
+
+    public LoginResponse(String username, List<String> roles, String jwtToken) {
+        this.username = username;
+        this.roles = roles;
+        this.jwtToken = jwtToken;
+    }
+
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+}
+

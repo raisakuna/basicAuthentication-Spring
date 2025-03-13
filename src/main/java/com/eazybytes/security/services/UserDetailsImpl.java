@@ -13,6 +13,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+// Why this class?
+// Spring Security doesn't understand custom user attributes, so they rely on this class to retrieve user information
+// Spring Security doesn't know how to access attributes like email, 2-factor authentication.  this is why this class
+// is helping here. Now after this, it doesn't know how to load all this custom user information or which
+// repository is responsible for giving us the data, that's why we use UserDetailsServiceImpl class.
 @NoArgsConstructor
 @Data
 public class UserDetailsImpl implements UserDetails {
@@ -51,6 +56,9 @@ public class UserDetailsImpl implements UserDetails {
         this.is2faEnabled = is2faEnabled;
         this.authorities = authorities;
     }
+
+    // static build() returns the userDetailsImpl object, it takes User entity and return userDetailsImpl
+    // so, it is like converter. The other overridden methods below are coming in from UserDetails.
     // Since Spring Security requires roles to be in GrantedAuthority format,
     // we need to convert AppRole values (enum ->ROLE_USER, ROLE_ADMIN) into SimpleGrantedAuthority.
 

@@ -1,0 +1,25 @@
+ @Bean
+	// 1
+	  @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
+	
+	
+	// 2
+	.requestMatchers("/api/auth/public/**").permitAll()
+	
+	// 3
+	http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
+    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+	
+	
+	// 4
+	@Bean
+	    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+	
